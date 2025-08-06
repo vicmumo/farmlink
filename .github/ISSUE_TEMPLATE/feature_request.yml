@@ -1,0 +1,23 @@
+name: ✨ Feature Request
+description: Suggest a new feature or improvement
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Got an idea to improve FarmLink? Let us know!
+  - type: input
+    id: summary
+    attributes:
+      label: Feature Summary
+      placeholder: "Add crop filtering by region"
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why is this feature needed?
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Suggested Implementation
+      description: Optional—how might this be built?

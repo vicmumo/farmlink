@@ -1,0 +1,23 @@
+name: 📌 Task
+description: Track a specific development task
+title: "[Task]: "
+labels: [task]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: Task Summary
+      placeholder: "Build dashboard component for crop analytics"
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: What needs to be done?
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - High
+        - Medium
+        - Low
