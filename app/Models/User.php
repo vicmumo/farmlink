@@ -45,4 +45,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // Relationships
+    public function farm() {
+        return $this->hasOne(Farm::class);
+    }
+
+    public function subscriptions() {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function orders() {
+        return $this->hasMany(Order::class);
+    }
 }
