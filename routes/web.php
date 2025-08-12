@@ -3,6 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MarketplaceController;
+use App\Http\Controllers\FarmController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TraceController;
+
+
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
