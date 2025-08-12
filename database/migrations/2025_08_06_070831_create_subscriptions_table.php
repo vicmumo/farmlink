@@ -12,9 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('subscriptions', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        $table->id();
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        $table->enum('plan_type', ['weekly', 'bi-weekly', 'monthly']);
+        $table->dateTime('next_delivery')->nullable();
+        $table->enum('status', ['active', 'paused', 'cancelled'])->default('active');
+        $table->timestamps();
+    });
+
     }
 
     /**

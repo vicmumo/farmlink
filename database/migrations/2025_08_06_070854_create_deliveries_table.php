@@ -12,9 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('deliveries', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        $table->id();
+        $table->foreignId('order_id')->constrained()->onDelete('cascade');
+        $table->text('route_info')->nullable();
+        $table->text('storage_info')->nullable();
+        $table->enum('status', ['scheduled', 'in-transit', 'delivered'])->default('scheduled');
+        $table->timestamps();
+    });
+
     }
 
     /**
