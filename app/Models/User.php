@@ -46,8 +46,10 @@ class User extends Authenticatable
         ];
     }
     // Relationships
-    public function farm() {
-        return $this->hasOne(Farm::class);
+
+    public function farms()
+    {
+        return $this->hasMany(Farm::class);
     }
 
     public function subscriptions() {
@@ -57,4 +59,14 @@ class User extends Authenticatable
     public function orders() {
         return $this->hasMany(Order::class);
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+    public function marketplaceItems()
+    {
+        return $this->hasMany(MarketplaceItem::class);
+    }
+
+
 }

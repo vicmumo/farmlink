@@ -23,13 +23,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::inertia('/dashboard', 'Dashboard');
-    Route::inertia('/marketplace', 'Marketplace');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/marketplace', [MarketplaceController::class, 'index'])->name('marketplace');
+    Route::get('/marketplace/{product}', [MarketplaceController::class, 'show'])->name('marketplace.show');
+    Route::get('/marketplace/{item}', [MarketplaceController::class, 'show'])->name('marketplace.show');
+    Route::get('/marketplace/create', [MarketplaceController::class, 'create'])->name('marketplace.create');
+
     Route::resource('farms', FarmController::class);
+
     Route::resource('products', ProductController::class);
+
     Route::resource('subscriptions', SubscriptionController::class);
+
     Route::resource('orders', OrderController::class);
-    Route::get('/trace/{product}', [TraceController::class, 'show']);
+
+    Route::get('/trace/{product}', [TraceController::class, 'show'])->name('trace.show');
 });
 
 
