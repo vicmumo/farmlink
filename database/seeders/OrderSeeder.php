@@ -18,5 +18,8 @@ class OrderSeeder extends Seeder
             'status' => 'confirmed',
             'delivery_date' => now()->addDays(2),
         ]);
+
+        Order::factory()->count(10)->create(); // Link to random users/products
+
     }
 }

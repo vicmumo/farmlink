@@ -1,19 +1,18 @@
 import React from 'react';
 import { usePage, Link } from '@inertiajs/react';
 import { PageProps } from '@inertiajs/core';
-
-import { ReactNode } from 'react';
 import MainLayout from '@/layouts/MainLayout';
-
-Index.layout = (page: ReactNode) => <MainLayout children={page} />;
-
 import {
   ChartBarIcon,
   ShoppingBagIcon,
   HomeIcon,
   UsersIcon,
+  PlusIcon,
+  ArrowRightIcon,
 } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
+
+Index.layout = (page: React.ReactNode) => <MainLayout children={page} />;
 
 interface User {
   id: number;
@@ -52,19 +51,17 @@ export default function Index() {
   const { user, data } = usePage<DashboardProps>().props;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Welcome Banner */}
-      <div className="bg-green-100 border-l-4 border-green-600 p-4 rounded">
+      <div className="bg-green-100 border-l-4 border-green-600 p-4 rounded shadow-sm">
         <p className="text-green-800 font-medium">
           Hello <span className="font-bold">{user.name}</span>, welcome back to FarmLink!
         </p>
+        <p className="text-sm text-gray-600 mt-1">Role: {user.role}</p>
       </div>
 
-      {/* Role Display */}
-      <p className="text-gray-600">Role: {user.role}</p>
-
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {user.role === 'farmer' && (
           <>
             <StatCard label="Farms" value={data.farmCount} />
@@ -92,24 +89,9 @@ export default function Index() {
       {/* Quick Actions */}
       {user.role === 'farmer' && (
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Link
-            href="/farms/create"
-            className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600 text-center"
-          >
-            + Add Farm
-          </Link>
-          <Link
-            href="/products/create"
-            className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600 text-center"
-          >
-            + Add Product
-          </Link>
-          <Link
-            href="/orders"
-            className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600 text-center"
-          >
-            View Orders
-          </Link>
+          <QuickAction href="/farms/create" label="Add Farm" />
+          <QuickAction href="/products/create" label="Add Product" />
+          <QuickAction href="/orders" label="View Orders" icon={ArrowRightIcon} />
         </div>
       )}
     </div>
@@ -124,13 +106,33 @@ function StatCard({ label, value }: StatCardProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-white p-4 rounded shadow flex items-center space-x-4"
+      className="bg-white p-4 rounded shadow flex items-center space-x-4 hover:shadow-md transition"
     >
       <Icon className="h-8 w-8 text-green-700" />
       <div>
-        <h2 className="text-lg font-semibold">{label}</h2>
+        <h2 className="text-lg font-semibold text-gray-800">{label}</h2>
         <p className="text-2xl font-bold text-green-700">{value}</p>
       </div>
     </motion.div>
+  );
+}
+
+function QuickAction({
+  href,
+  label,
+  icon: Icon = PlusIcon,
+}: {
+  href: string;
+  label: string;
+  icon?: React.ComponentType<{ className?: string }>;
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center justify-center gap-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600 transition text-sm font-medium shadow"
+    >
+      <Icon className="h-5 w-5" />
+      {label}
+    </Link>
   );
 }

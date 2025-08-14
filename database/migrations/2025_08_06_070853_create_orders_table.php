@@ -13,12 +13,25 @@ return new class extends Migration
     {
        Schema::create('orders', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
+        // Relationships
+        $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // Consumer
+        $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+        $table->foreignId('farm_id')->nullable()->constrained()->nullOnDelete(); // Optional for traceability
+
+        // Order details
+        $table->integer('quantity');
         $table->decimal('total_price', 10, 2);
-        $table->enum('status', ['pending', 'confirmed', 'delivered'])->default('pending');
-        $table->dateTime('delivery_date')->nullable();
+        $table->enum('status', ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'])->default('pending');
+        $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
+
+        // Optional metadata
+        $table->date('delivery_date')->nullable();
+        $table->text('notes')->nullable();
+
         $table->timestamps();
-    });
+});
+
     
     }
 

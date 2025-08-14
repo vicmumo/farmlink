@@ -26,10 +26,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/marketplace', [MarketplaceController::class, 'index'])->name('marketplace');
-    Route::get('/marketplace/{product}', [MarketplaceController::class, 'show'])->name('marketplace.show');
-    Route::get('/marketplace/{item}', [MarketplaceController::class, 'show'])->name('marketplace.show');
-    Route::get('/marketplace/create', [MarketplaceController::class, 'create'])->name('marketplace.create');
+    Route::resource('marketplace', MarketplaceController::class)->except(['destroy']);
 
     Route::resource('farms', FarmController::class);
 
