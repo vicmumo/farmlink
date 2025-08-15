@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, usePage } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import AuthLayout from '@/layouts/MainLayout';
 import Input from '@/components/form/Input';
 import Select from '@/components/form/Select';
@@ -53,7 +53,9 @@ export default function Edit({ listing, products, farms, auth }: Props) {
   const isAdmin = auth.user.role === 'admin';
 
   return (
-    <AuthLayout title={`Edit Listing: ${listing.name}`}>
+    <AuthLayout>
+      <h1 className="text-2xl font-bold mb-6">{`Edit Listing: ${listing.name}`}</h1>
+
       <form onSubmit={handleSubmit} className="max-w-xl space-y-6 transition-all duration-300">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">Listing Details</h2>
@@ -89,7 +91,7 @@ export default function Edit({ listing, products, farms, auth }: Props) {
           label="Product"
           options={products.map(p => ({ value: p.id, label: p.name }))}
           value={data.product_id}
-          onChange={value => setData('product_id', value)}
+          onChange={value => setData('product_id', Number(value))}
           error={errors.product_id}
           required
         />
@@ -99,7 +101,7 @@ export default function Edit({ listing, products, farms, auth }: Props) {
             label="Farm"
             options={farms.map(f => ({ value: f.id, label: f.name }))}
             value={data.farm_id}
-            onChange={value => setData('farm_id', value)}
+            onChange={value => setData('farm_id', Number(value))}
             error={errors.farm_id}
             required
           />
@@ -115,7 +117,7 @@ export default function Edit({ listing, products, farms, auth }: Props) {
             { value: 'cancelled', label: 'Cancelled' },
           ]}
           value={data.status}
-          onChange={value => setData('status', value)}
+          onChange={value => setData('status', String(value))}
           error={errors.status}
           required
         />

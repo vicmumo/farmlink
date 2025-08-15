@@ -2,63 +2,86 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subscription;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class SubscriptionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $subscriptions = Subscription::query()
+            ->when($request->status, fn($q) => $q->where('status', $request->status))
+            ->paginate(10)
+            ->withQueryString();
+
+        return Inertia::render('SubscriptionList', [
+            'subscriptions' => $subscriptions->items(),
+            'meta' => $subscriptions->toArray()['meta'] ?? [],
+            'links' => $subscriptions->toArray()['links'] ?? [], 
+            'auth' => $request->user(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return Inertia::render('SubscriptionForm', [
+            'products' => Product::all(), // or filtered by role
+            'auth' => auth()->user(),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function edit(Subscription $subscription)
+    {
+        return Inertia::render('SubscriptionForm', [
+            'subscription' => $subscription,
+            'products' => Product::all(),
+            'selectedProducts' => $subscription->products->pluck('id'),
+            'auth' => auth()->user(),
+        ]);
+    }
+
+
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'plan' => 'required|string|max:255',
+            'frequency' => 'required|in:weekly,monthly,quarterly',
+            'start_date' => 'required|date',
+            'status' => 'required|in:active,paused,cancelled',
+        ]);
+
+        Subscription::create($validated);
+
+        // return redirect()->route('subscriptions.index')->with('success', 'Subscription created.');
+        // return redirect()->route('subscriptions.index')->with('success', 'Subscription created successfully');
+        // return redirect()->back()->with('error', 'Failed to create subscription');
+
+        try {
+            Subscription::create($validated);
+            return redirect()->route('subscriptions.index')->with('success', 'Subscription created successfully');
+        } catch (\Exception $e) {
+            \Log::error('Subscription creation failed', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Failed to create subscription');
+
+        }
+
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, Subscription $subscription)
     {
-        //
+        $validated = $request->validate([
+            'plan' => 'required|string|max:255',
+            'frequency' => 'required|in:weekly,monthly,quarterly',
+            'start_date' => 'required|date',
+            'status' => 'required|in:active,paused,cancelled',
+        ]);
+
+        $subscription->update($validated);
+
+        return redirect()->route('subscriptions.index')->with('success', 'Subscription updated successfully');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

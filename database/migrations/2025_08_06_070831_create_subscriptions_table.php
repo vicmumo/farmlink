@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('subscriptions', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->enum('plan_type', ['weekly', 'bi-weekly', 'monthly']);
-        $table->dateTime('next_delivery')->nullable();
-        $table->enum('status', ['active', 'paused', 'cancelled'])->default('active');
-        $table->timestamps();
-    });
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->enum('frequency', ['weekly', 'monthly', 'quarterly']);
+            $table->enum('status', ['active', 'paused', 'cancelled'])->default('active');
+            $table->date('next_delivery_date')->nullable();
+            $table->timestamp('last_renewed_at')->nullable();
+            $table->timestamps();
 
+        });
     }
 
     /**

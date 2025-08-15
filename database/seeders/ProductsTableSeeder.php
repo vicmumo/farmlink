@@ -1,13 +1,18 @@
 <?php
 
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\User;
 
-class ProductSeeder extends Seeder
-
+class ProductsTableSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
         // Get a random user or create one if none exist
         $user = User::first() ?? User::factory()->create();

@@ -14,13 +14,32 @@ interface Props {
   required?: boolean;
 }
 
-export default function Select({ label, options, value, onChange, error, required }: Props) {
+export default function Select({
+  label,
+  options,
+  value,
+  onChange,
+  error,
+  required,
+}: Props) {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    // Cast to match original type
+    const castValue: string | number = isNaN(Number(selectedValue))
+      ? selectedValue
+      : Number(selectedValue);
+    onChange(castValue);
+  };
+
   return (
     <div className="space-y-1">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <label className="block text-sm font-medium text-gray-700">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
       <select
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={handleChange}
         required={required}
         className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring ${
           error ? 'border-red-500 ring-red-300' : 'border-gray-300 ring-indigo-300'
