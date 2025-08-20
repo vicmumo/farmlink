@@ -6,28 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('farm_id')->constrained()->onDelete('cascade');
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->string('name');
-        $table->decimal('price', 10, 2);
-        $table->integer('quantity');
-        $table->date('harvest_date');
-        $table->text('qr_code_data')->nullable();
-        $table->text('description')->nullable();
-        $table->timestamps();
-    });
+            $table->id();
+
+            // Foreign keys
+            $table->foreignId('farm_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            
+            // Core product info
+            $table->string('category');
+            $table->string('name');
+            $table->decimal('price', 10, 2)->default(0);
+            $table->integer('quantity')->default(0);
+            $table->date('harvest_date')->nullable();
+
+            // Optional metadata
+            $table->text('qr_code_data')->nullable();
+            $table->text('description')->nullable();
+
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('products');

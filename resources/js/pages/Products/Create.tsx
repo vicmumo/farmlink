@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import { PageProps } from '@inertiajs/core';
 import MainLayout from '@/layouts/MainLayout';
+import GroupedAsyncMultiSelect from '@/components/products/GroupedAsyncMultiSelect';
 
 interface Farm {
   id: number;
@@ -10,11 +11,11 @@ interface Farm {
 
 interface CreatePageProps extends PageProps {
   farms: Farm[];
-  [key: string]: unknown;
+  auth: { user: { role: string } };
 }
 
 export default function Create() {
-  const { farms } = usePage<CreatePageProps>().props;
+  const { farms, auth } = usePage<CreatePageProps>().props;
 
   const { data, setData, post, processing, errors } = useForm<{
     name: string;
@@ -22,12 +23,14 @@ export default function Create() {
     price: number;
     stock: number;
     farm_id: number;
+    linked_product_ids: number[];
   }>({
     name: '',
     category: '',
     price: 0,
     stock: 0,
     farm_id: farms.length > 0 ? farms[0].id : 0,
+    linked_product_ids: [],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -100,6 +103,18 @@ export default function Create() {
           {errors.farm_id && <p className="text-red-600 text-sm">{errors.farm_id}</p>}
         </div>
 
+        <div>
+          <GroupedAsyncMultiSelect
+            label="Link Related Products"
+            selected={data.linked_product_ids}
+            onChange={(ids: number[]) => setData('linked_product_ids', ids)}
+            fetchUrl="/api/products"
+          />
+          {errors.linked_product_ids && (
+            <p className="text-red-600 text-sm">{errors.linked_product_ids}</p>
+          )}
+        </div>
+
         <button
           type="submit"
           disabled={processing}
@@ -112,4 +127,4 @@ export default function Create() {
   );
 }
 
-Create.layout = (page: React.ReactNode) => <MainLayout children={page} />;
+Create.layout = (page: React.ReactNode) => <MainLayout children={page} title={''} />;

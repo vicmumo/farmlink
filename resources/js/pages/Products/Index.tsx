@@ -12,6 +12,10 @@ interface Product {
   farm: {
     name: string;
   };
+  linked_products?: {
+    id: number;
+    name: string;
+  }[];
 }
 
 interface ProductsPageProps extends PageProps {
@@ -39,15 +43,23 @@ export default function Index() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {products.map(product => (
-            <div key={product.id} className="bg-white p-4 rounded shadow">
+            <div key={product.id} className="bg-white p-4 rounded shadow space-y-2">
               <h2 className="text-lg font-semibold">{product.name}</h2>
               <p className="text-sm text-gray-600">Farm: {product.farm.name}</p>
               <p className="text-sm text-gray-600">Category: {product.category}</p>
               <p className="text-sm text-gray-600">Price: KES {product.price}</p>
               <p className="text-sm text-gray-600">Stock: {product.stock}</p>
+
+              {product.linked_products && product.linked_products.length > 0 && (
+                <div className="text-sm text-gray-600">
+                  <span className="font-medium">Linked Products:</span>{' '}
+                  {product.linked_products.map(lp => lp.name).join(', ')}
+                </div>
+              )}
+
               <Link
                 href={`/products/${product.id}/edit`}
-                className="text-green-700 hover:underline mt-4 inline-block"
+                className="text-green-700 hover:underline mt-2 inline-block"
               >
                 Edit
               </Link>
@@ -59,4 +71,4 @@ export default function Index() {
   );
 }
 
-Index.layout = (page: React.ReactNode) => <MainLayout children={page} />;
+Index.layout = (page: React.ReactNode) => <MainLayout children={page} title={''} />;

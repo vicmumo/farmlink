@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import { PageProps } from '@inertiajs/core';
 import MainLayout from '@/layouts/MainLayout';
+import GroupedAsyncMultiSelect from '@/components/products/GroupedAsyncMultiSelect';
 
 interface Farm {
   id: number;
@@ -15,6 +16,7 @@ interface Product {
   price: number;
   stock: number;
   farm_id: number;
+  linked_product_ids: number[];
 }
 
 interface EditPageProps extends PageProps {
@@ -32,12 +34,14 @@ export default function Edit() {
     price: number;
     stock: number;
     farm_id: number;
+    linked_product_ids: number[];
   }>({
     name: product.name,
     category: product.category,
     price: product.price,
     stock: product.stock,
     farm_id: product.farm_id,
+    linked_product_ids: product.linked_product_ids || [],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -110,6 +114,18 @@ export default function Edit() {
           {errors.farm_id && <p className="text-red-600 text-sm">{errors.farm_id}</p>}
         </div>
 
+        <div>
+          <GroupedAsyncMultiSelect
+            label="Linked Products"
+            selected={data.linked_product_ids}
+            onChange={(ids: number[]) => setData('linked_product_ids', ids)}
+            fetchUrl="/api/products"
+          />
+          {errors.linked_product_ids && (
+            <p className="text-red-600 text-sm">{errors.linked_product_ids}</p>
+          )}
+        </div>
+
         <button
           type="submit"
           disabled={processing}
@@ -122,4 +138,4 @@ export default function Edit() {
   );
 }
 
-Edit.layout = (page: React.ReactNode) => <MainLayout children={page} />;
+Edit.layout = (page: React.ReactNode) => <MainLayout children={page} title={''} />;

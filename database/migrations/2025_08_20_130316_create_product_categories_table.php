@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('farms', function (Blueprint $table) {
+        Schema::create('product_categories', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->string('name');
-        $table->string('location');
-        $table->string('owner');
-        $table->text('certifications')->nullable();
-        $table->text('description')->nullable();
+        $table->string('name')->unique(); // e.g. Grains, Fruits, Vegetables
+        $table->text('description')->nullable(); // Optional metadata
         $table->timestamps();
     });
 
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('farms');
+        Schema::dropIfExists('product_categories');
     }
 };

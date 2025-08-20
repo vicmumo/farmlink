@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TraceController;
+use App\Models\Product;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -31,6 +32,17 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('orders', OrderController::class);
 
     Route::get('/trace/{product}', [TraceController::class, 'show'])->name('trace.show');
+
+    Route::get('/products', function () {
+        return Product::with('farm')->get()->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'farm' => ['name' => $product->farm->name ?? 'Ungrouped'],
+            ];
+        });
+    });
+
 });
 
 require __DIR__.'/settings.php';
