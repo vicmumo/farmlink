@@ -68,5 +68,14 @@ class User extends Authenticatable
         return $this->hasMany(MarketplaceItem::class);
     }
 
+    public function isConsumer(): bool
+    {
+        return $this->role === 'consumer';
+    }
+    public function isFarmer(): bool
+    {
+        return $this->role === 'farmer';
+    }
+
 
 }

@@ -52,13 +52,16 @@ class ProductSeeder extends Seeder
             'name' => 'Maize',
             'category' => 'Grains',
             'quantity' => 50,
-            'farm_id' => 1,
+            'user_id' => $user->id,
+            'farm_id' => $farms->first()->id,
         ]);
 
         // Factory-generated products with linked relationships
         Product::factory()
             ->count(10)
-            ->create()
+            ->create([
+                'user_id' => $user->id,
+            ])
             ->each(function ($product) use ($farms) {
                 $product->farm_id = $farms->random()->id;
                 $product->save();

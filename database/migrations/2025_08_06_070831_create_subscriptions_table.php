@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('status', ['active', 'paused', 'cancelled'])->default('active');
             $table->date('next_delivery_date')->nullable();
             $table->timestamp('last_renewed_at')->nullable();
+            $table->string('plan_type'); //
             $table->timestamps();
 
         });

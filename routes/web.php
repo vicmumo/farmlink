@@ -16,11 +16,6 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -32,16 +27,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('orders', OrderController::class);
 
     Route::get('/trace/{product}', [TraceController::class, 'show'])->name('trace.show');
-
-    Route::get('/products', function () {
-        return Product::with('farm')->get()->map(function ($product) {
-            return [
-                'id' => $product->id,
-                'name' => $product->name,
-                'farm' => ['name' => $product->farm->name ?? 'Ungrouped'],
-            ];
-        });
-    });
 
 });
 

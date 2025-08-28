@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Farm extends Model
 {
     use HasFactory;
+    protected $fillable = ['name', 'location', 'description', 'user_id'];
 
     public function user()
     {
@@ -18,4 +19,5 @@ class Farm extends Model
     {
         return $this->hasMany(Product::class);
     }
+    
 }
