@@ -38,7 +38,11 @@ class FarmController extends Controller
                 'description' => 'nullable|string',
             ]);
 
-            $request->user()->farms()->create($validated);
+            $validated['owner'] = $request->user()->id;
+
+            $request->user()->farms()->create($validated);          
+
+            $validated['user_id'] = $request->user()->id;
 
             return redirect()->route('farms.index')->with('success', 'Farm created successfully.');
         }
@@ -46,10 +50,10 @@ class FarmController extends Controller
     {
         $this->authorize('update', $farm); // Optional: add policy
 
-        return Inertia::render('Farms/Edit', [
+         return Inertia::render('Farms/Edit', [
             'farm' => $farm,
         ]);
-    }
+     }
 
     public function update(Request $request, Farm $farm)
     {

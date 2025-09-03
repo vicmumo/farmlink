@@ -21,4 +21,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+    protected $policies = [
+    \App\Models\Farm::class => \App\Policies\FarmPolicy::class,
+    ];
+
 }

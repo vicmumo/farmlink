@@ -47,6 +47,8 @@ class ProductController extends Controller
             'linked_product_ids.*' => 'exists:products,id',
         ]);
 
+        $validated['user_id'] = $request->user()->id;
+
         $product = $request->user()->products()->create($validated);
 
         if ($request->filled('linked_product_ids')) {
