@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
     }
     protected $policies = [
     \App\Models\Farm::class => \App\Policies\FarmPolicy::class,
+    \App\Models\Product::class => \App\Policies\ProductPolicy::class,
+    \App\Models\Marketplace::class => \App\Policies\MarketplacePolicy::class,
     ];
 
 }

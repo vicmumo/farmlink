@@ -27,6 +27,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('orders', OrderController::class);
 
     Route::get('/trace/{product}', [TraceController::class, 'show'])->name('trace.show');
+    Route::get('/marketplace/{marketplace}/edit', [MarketplaceController::class, 'edit'])
+    ->middleware('auth')
+    ->name('marketplace.edit');
+
 
 });
 
